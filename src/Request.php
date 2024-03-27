@@ -60,7 +60,7 @@ class Request extends MessageTrait implements RequestInterface
         }
     }
 
-    public function getRequestTarget()
+    public function getRequestTarget(): string
     {
         if ($this->requestTarget !== null) {
             return $this->requestTarget;
@@ -77,7 +77,7 @@ class Request extends MessageTrait implements RequestInterface
         return $target;
     }
 
-    public function withRequestTarget($requestTarget)
+    public function withRequestTarget($requestTarget): RequestInterface
     {
         if (preg_match('#\s#', $requestTarget)) {
             throw new InvalidArgumentException(
@@ -90,24 +90,24 @@ class Request extends MessageTrait implements RequestInterface
         return $new;
     }
 
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }
 
-    public function withMethod($method)
+    public function withMethod($method): RequestInterface
     {
         $new = clone $this;
         $new->method = strtoupper($method);
         return $new;
     }
 
-    public function getUri()
+    public function getUri(): UriInterface
     {
         return $this->uri;
     }
 
-    public function withUri(UriInterface $uri, $preserveHost = false)
+    public function withUri(UriInterface $uri, $preserveHost = false): RequestInterface
     {
         if ($uri === $this->uri) {
             return $this;
@@ -132,7 +132,7 @@ class Request extends MessageTrait implements RequestInterface
         return $newInstance;
     }
 
-    private function updateHostFromUri($host)
+    private function updateHostFromUri($host): void
     {
         // Ensure Host is the first header.
         // See: http://tools.ietf.org/html/rfc7230#section-5.4
