@@ -18,7 +18,7 @@ defined('PHP_QUERY_RFC3986') or define('PHP_QUERY_RFC3986', 2);
  *
  * @return string
  */
-function str(MessageInterface $message)
+function str(MessageInterface $message): string
 {
     if ($message instanceof RequestInterface) {
         $msg = trim($message->getMethod() . ' '
@@ -54,7 +54,7 @@ function str(MessageInterface $message)
  * @return UriInterface
  * @throws \InvalidArgumentException
  */
-function uri_for($uri)
+function uri_for($uri): UriInterface
 {
     if ($uri instanceof UriInterface) {
         return $uri;
@@ -78,7 +78,7 @@ function uri_for($uri)
  * @return Stream
  * @throws \InvalidArgumentException if the $resource arg is not valid.
  */
-function stream_for($resource = '', array $options = array())
+function stream_for($resource = '', array $options = array()): StreamInterface
 {
     switch (gettype($resource)) {
         case 'string':
@@ -127,7 +127,7 @@ function stream_for($resource = '', array $options = array())
  *
  * @return array Returns the parsed header values.
  */
-function parse_header($header)
+function parse_header($header): array
 {
     static $trimmed = "\"'  \n\t\r";
     $params = $matches = array();
@@ -160,7 +160,7 @@ function parse_header($header)
  *
  * @return array Returns the normalized header field values.
  */
-function normalize_header($header)
+function normalize_header($header): array
 {
     if (!is_array($header)) {
         return array_map('trim', explode(',', $header));
@@ -199,7 +199,7 @@ function normalize_header($header)
  *
  * @return RequestInterface
  */
-function modify_request(RequestInterface $request, array $changes)
+function modify_request(RequestInterface $request, array $changes): RequestInterface
 {
     if (!$changes) {
         return $request;
@@ -251,7 +251,7 @@ function modify_request(RequestInterface $request, array $changes)
  *
  * @throws \RuntimeException
  */
-function rewind_body(MessageInterface $message)
+function rewind_body(MessageInterface $message): void
 {
     $body = $message->getBody();
 
@@ -272,7 +272,7 @@ function rewind_body(MessageInterface $message)
  * @return resource
  * @throws \RuntimeException if the file cannot be opened
  */
-function try_fopen($filename, $mode)
+function try_fopen($filename, $mode): resource
 {
     $ex = null;
     $fargs = func_get_args();
@@ -306,7 +306,7 @@ function try_fopen($filename, $mode)
  * @return string
  * @throws \RuntimeException on error.
  */
-function copy_to_string(StreamInterface $stream, $maxLen = -1)
+function copy_to_string(StreamInterface $stream, $maxLen = -1): string
 {
     $buffer = '';
 
@@ -347,11 +347,8 @@ function copy_to_string(StreamInterface $stream, $maxLen = -1)
  *
  * @throws \RuntimeException on error.
  */
-function copy_to_stream(
-    StreamInterface $source,
-    StreamInterface $dest,
-    $maxLen = -1
-) {
+function copy_to_stream(StreamInterface $source, StreamInterface $dest, $maxLen = -1): void
+{
     if ($maxLen === -1) {
         while (!$source->eof()) {
             if (!$dest->write($source->read(1048576))) {
@@ -385,11 +382,8 @@ function copy_to_stream(
  * @return string Returns the hash of the stream
  * @throws \RuntimeException on error.
  */
-function hash(
-    StreamInterface $stream,
-    $algo,
-    $rawOutput = false
-) {
+function hash(StreamInterface $stream, $algo, $rawOutput = false): string
+{
     $pos = $stream->tell();
 
     if ($pos > 0) {
@@ -415,7 +409,7 @@ function hash(
  *
  * @return string|bool
  */
-function readline(StreamInterface $stream, $maxLength = null)
+function readline(StreamInterface $stream, $maxLength = null): string
 {
     $buffer = '';
     $size = 0;
@@ -442,7 +436,7 @@ function readline(StreamInterface $stream, $maxLength = null)
  *
  * @return Request
  */
-function parse_request($message)
+function parse_request($message): Request
 {
     $data = _parse_message($message);
     $matches = array();
@@ -473,7 +467,7 @@ function parse_request($message)
  *
  * @return ServerRequest
  */
-function parse_server_request($message, array $serverParams = array())
+function parse_server_request($message, array $serverParams = array()): ServerRequest
 {
     $request = parse_request($message);
 
@@ -494,7 +488,7 @@ function parse_server_request($message, array $serverParams = array())
  *
  * @return Response
  */
-function parse_response($message)
+function parse_response($message): Response
 {
     $data = _parse_message($message);
     // According to https://tools.ietf.org/html/rfc7230#section-3.1.2 the space
@@ -528,7 +522,7 @@ function parse_response($message)
  *
  * @return array
  */
-function parse_query($str, $urlEncoding = true)
+function parse_query($str, $urlEncoding = true): array
 {
     $result = array();
 
@@ -578,7 +572,7 @@ function parse_query($str, $urlEncoding = true)
  *                            to encode using RFC1738.
  * @return string
  */
-function build_query(array $params, $encoding = PHP_QUERY_RFC3986)
+function build_query(array $params, $encoding = PHP_QUERY_RFC3986): string
 {
     if (!$params) {
         return '';
@@ -624,7 +618,7 @@ function build_query(array $params, $encoding = PHP_QUERY_RFC3986)
  *
  * @return null|string
  */
-function mimetype_from_filename($filename)
+function mimetype_from_filename($filename): ?string
 {
     return mimetype_from_extension(pathinfo($filename, PATHINFO_EXTENSION));
 }
@@ -637,7 +631,7 @@ function mimetype_from_filename($filename)
  * @return string|null
  * @link http://svn.apache.org/repos/asf/httpd/httpd/branches/1.3.x/conf/mime.types
  */
-function mimetype_from_extension($extension)
+function mimetype_from_extension($extension): ?string
 {
     static $mimetypes = array(
         '7z' => 'application/x-7z-compressed',
@@ -759,7 +753,7 @@ function mimetype_from_extension($extension)
  * @return array
  * @internal
  */
-function _parse_message($message)
+function _parse_message($message): array
 {
     if (!$message) {
         throw new \InvalidArgumentException('Invalid message');
@@ -799,7 +793,7 @@ function _parse_message($message)
  * @return string
  * @internal
  */
-function _parse_request_uri($path, array $headers)
+function _parse_request_uri($path, array $headers): string
 {
     $hostKey = array_filter(array_keys($headers), function ($k) {
         return strtolower($k) === 'host';
@@ -817,7 +811,7 @@ function _parse_request_uri($path, array $headers)
 }
 
 /** @internal */
-function _caseless_remove($keys, array $data)
+function _caseless_remove($keys, array $data): array
 {
     $result = array();
 
