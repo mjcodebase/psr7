@@ -2,6 +2,7 @@
 namespace RingCentral\Psr7;
 
 use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\MessageInterface;
 
 /**
  * Trait implementing functionality common to requests and responses.
@@ -20,12 +21,12 @@ abstract class MessageTrait
     /** @var StreamInterface */
     protected $stream;
 
-    public function getProtocolVersion()
+    public function getProtocolVersion(): string
     {
         return $this->protocol;
     }
 
-    public function withProtocolVersion($version)
+    public function withProtocolVersion($version): MessageInterface
     {
         if ($this->protocol === $version) {
             return $this;
@@ -36,28 +37,28 @@ abstract class MessageTrait
         return $new;
     }
 
-    public function getHeaders()
+    public function getHeaders(): array
     {
         return $this->headerLines;
     }
 
-    public function hasHeader($header)
+    public function hasHeader($header): bool
     {
         return isset($this->headers[strtolower($header)]);
     }
 
-    public function getHeader($header)
+    public function getHeader($header): array
     {
         $name = strtolower($header);
         return isset($this->headers[$name]) ? $this->headers[$name] : array();
     }
 
-    public function getHeaderLine($header)
+    public function getHeaderLine($header): string
     {
         return implode(', ', $this->getHeader($header));
     }
 
-    public function withHeader($header, $value)
+    public function withHeader($header, $value): MessageInterface
     {
         $new = clone $this;
         $header = trim($header);
@@ -85,7 +86,7 @@ abstract class MessageTrait
         return $new;
     }
 
-    public function withAddedHeader($header, $value)
+    public function withAddedHeader($header, $value): MessageInterface
     {
         if (!$this->hasHeader($header)) {
             return $this->withHeader($header, $value);
@@ -106,7 +107,7 @@ abstract class MessageTrait
         return $new;
     }
 
-    public function withoutHeader($header)
+    public function withoutHeader($header): MessageInterface
     {
         if (!$this->hasHeader($header)) {
             return $this;
@@ -125,7 +126,7 @@ abstract class MessageTrait
         return $new;
     }
 
-    public function getBody()
+    public function getBody(): StreamInterface
     {
         if (!$this->stream) {
             $this->stream = stream_for('');
@@ -134,7 +135,7 @@ abstract class MessageTrait
         return $this->stream;
     }
 
-    public function withBody(StreamInterface $body)
+    public function withBody(StreamInterface $body): MessageInterface
     {
         if ($body === $this->stream) {
             return $this;
@@ -145,7 +146,7 @@ abstract class MessageTrait
         return $new;
     }
 
-    protected function setHeaders(array $headers)
+    protected function setHeaders(array $headers): void
     {
         $this->headerLines = $this->headers = array();
         foreach ($headers as $header => $value) {
