@@ -35,12 +35,12 @@ class MultipartStream extends StreamDecoratorTrait implements StreamInterface
      *
      * @return string
      */
-    public function getBoundary()
+    public function getBoundary(): string
     {
         return $this->boundary;
     }
 
-    public function isWritable()
+    public function isWritable(): bool
     {
         return false;
     }
@@ -48,7 +48,7 @@ class MultipartStream extends StreamDecoratorTrait implements StreamInterface
     /**
      * Get the headers needed before transferring the content of a POST file
      */
-    private function getHeaders(array $headers)
+    private function getHeaders(array $headers): string
     {
         $str = '';
         foreach ($headers as $key => $value) {
@@ -61,7 +61,7 @@ class MultipartStream extends StreamDecoratorTrait implements StreamInterface
     /**
      * Create the aggregate stream that will be used to upload the POST data
      */
-    protected function createStream(array $elements)
+    protected function createStream(array $elements): StreamInterface
     {
         $stream = new AppendStream();
 
@@ -75,7 +75,7 @@ class MultipartStream extends StreamDecoratorTrait implements StreamInterface
         return $stream;
     }
 
-    private function addElement(AppendStream $stream, array $element)
+    private function addElement(AppendStream $stream, array $element): void
     {
         foreach (array('contents', 'name') as $key) {
             if (!array_key_exists($key, $element)) {
@@ -107,7 +107,7 @@ class MultipartStream extends StreamDecoratorTrait implements StreamInterface
     /**
      * @return array
      */
-    private function createElement($name, $stream, $filename, array $headers)
+    private function createElement($name, $stream, $filename, array $headers): array
     {
         // Set a default content-disposition header if one was no provided
         $disposition = $this->getHeader($headers, 'content-disposition');
@@ -138,7 +138,7 @@ class MultipartStream extends StreamDecoratorTrait implements StreamInterface
         return array($stream, $headers);
     }
 
-    private function getHeader(array $headers, $key)
+    private function getHeader(array $headers, $key): ?string
     {
         $lowercaseHeader = strtolower($key);
         foreach ($headers as $k => $v) {
