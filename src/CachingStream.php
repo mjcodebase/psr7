@@ -30,17 +30,17 @@ class CachingStream extends StreamDecoratorTrait implements StreamInterface
         parent::__construct($target ?: new Stream(fopen('php://temp', 'r+')));
     }
 
-    public function getSize()
+    public function getSize(): ?int
     {
         return max($this->stream->getSize(), $this->remoteStream->getSize());
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->seek(0);
     }
 
-    public function seek($offset, $whence = SEEK_SET)
+    public function seek($offset, $whence = SEEK_SET): void
     {
         if ($whence == SEEK_SET) {
             $byte = $offset;
@@ -69,7 +69,7 @@ class CachingStream extends StreamDecoratorTrait implements StreamInterface
         }
     }
 
-    public function read($length)
+    public function read($length): string
     {
         // Perform a regular read on any previously read data from the buffer
         $data = $this->stream->read($length);
@@ -98,7 +98,7 @@ class CachingStream extends StreamDecoratorTrait implements StreamInterface
         return $data;
     }
 
-    public function write($string)
+    public function write($string): int
     {
         // When appending to the end of the currently read stream, you'll want
         // to skip bytes from being read from the remote stream to emulate
@@ -112,7 +112,7 @@ class CachingStream extends StreamDecoratorTrait implements StreamInterface
         return $this->stream->write($string);
     }
 
-    public function eof()
+    public function eof(): bool
     {
         return $this->stream->eof() && $this->remoteStream->eof();
     }
@@ -120,12 +120,12 @@ class CachingStream extends StreamDecoratorTrait implements StreamInterface
     /**
      * Close both the remote stream and buffer stream
      */
-    public function close()
+    public function close(): void
     {
         $this->remoteStream->close() && $this->stream->close();
     }
 
-    private function cacheEntireStream()
+    private function cacheEntireStream(): int
     {
         $target = new FnStream(array('write' => 'strlen'));
         copy_to_stream($this, $target);
