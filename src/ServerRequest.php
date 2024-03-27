@@ -3,6 +3,9 @@
 namespace RingCentral\Psr7;
 
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UploadedFileInterface;
+use Psr\Http\Message\UriInterface;
 use RingCentral\Psr7\Request;
 
 /**
@@ -40,41 +43,41 @@ class ServerRequest extends Request implements ServerRequestInterface
         $this->serverParams = $serverParams;
     }
 
-    public function getServerParams()
+    public function getServerParams(): array
     {
         return $this->serverParams;
     }
 
-    public function getCookieParams()
+    public function getCookieParams(): array
     {
         return $this->cookies;
     }
 
-    public function withCookieParams(array $cookies)
+    public function withCookieParams(array $cookies): ServerRequestInterface
     {
         $new = clone $this;
         $new->cookies = $cookies;
         return $new;
     }
 
-    public function getQueryParams()
+    public function getQueryParams(): array
     {
         return $this->queryParams;
     }
 
-    public function withQueryParams(array $query)
+    public function withQueryParams(array $query): ServerRequestInterface
     {
         $new = clone $this;
         $new->queryParams = $query;
         return $new;
     }
 
-    public function getUploadedFiles()
+    public function getUploadedFiles(): array
     {
         return $this->fileParams;
     }
 
-    public function withUploadedFiles(array $uploadedFiles)
+    public function withUploadedFiles(array $uploadedFiles): ServerRequestInterface
     {
         $new = clone $this;
         $new->fileParams = $uploadedFiles;
@@ -86,14 +89,14 @@ class ServerRequest extends Request implements ServerRequestInterface
         return $this->parsedBody;
     }
 
-    public function withParsedBody($data)
+    public function withParsedBody($data): ServerRequestInterface
     {
         $new = clone $this;
         $new->parsedBody = $data;
         return $new;
     }
 
-    public function getAttributes()
+    public function getAttributes(): array
     {
         return $this->attributes;
     }
@@ -106,14 +109,14 @@ class ServerRequest extends Request implements ServerRequestInterface
         return $this->attributes[$name];
     }
 
-    public function withAttribute($name, $value)
+    public function withAttribute($name, $value): ServerRequestInterface
     {
         $new = clone $this;
         $new->attributes[$name] = $value;
         return $new;
     }
 
-    public function withoutAttribute($name)
+    public function withoutAttribute($name): ServerRequestInterface
     {
         $new = clone $this;
         unset($new->attributes[$name]);
