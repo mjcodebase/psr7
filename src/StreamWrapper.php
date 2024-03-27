@@ -46,14 +46,14 @@ class StreamWrapper
     /**
      * Registers the stream wrapper if needed
      */
-    public static function register()
+    public static function register(): void
     {
         if (!in_array('guzzle', stream_get_wrappers())) {
             stream_wrapper_register('guzzle', __CLASS__);
         }
     }
 
-    public function stream_open($path, $mode, $options, &$opened_path)
+    public function stream_open($path, $mode, $options, &$opened_path): bool
     {
         $options = stream_context_get_options($this->context);
 
@@ -67,34 +67,34 @@ class StreamWrapper
         return true;
     }
 
-    public function stream_read($count)
+    public function stream_read($count): string
     {
         return $this->stream->read($count);
     }
 
-    public function stream_write($data)
+    public function stream_write($data): int
     {
         return (int) $this->stream->write($data);
     }
 
-    public function stream_tell()
+    public function stream_tell(): int
     {
         return $this->stream->tell();
     }
 
-    public function stream_eof()
+    public function stream_eof(): bool
     {
         return $this->stream->eof();
     }
 
-    public function stream_seek($offset, $whence)
+    public function stream_seek($offset, $whence): bool
     {
         $this->stream->seek($offset, $whence);
 
         return true;
     }
 
-    public function stream_stat()
+    public function stream_stat(): array
     {
         static $modeMap = array(
             'r'  => 33060,
