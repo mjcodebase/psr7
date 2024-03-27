@@ -32,7 +32,7 @@ class LazyOpenStream extends StreamDecoratorTrait implements StreamInterface
      *
      * @return StreamInterface
      */
-    protected function createStream()
+    protected function createStream(): StreamInterface
     {
         return stream_for(try_fopen($this->filename, $this->mode));
     }
