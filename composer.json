@@ -1,5 +1,5 @@
 {
-    "name": "ringcentral/psr7",
+    "name": "mjcodebase/psr7",
     "type": "library",
     "description": "PSR-7 message implementation",
     "keywords": ["message", "stream", "http", "uri"],
