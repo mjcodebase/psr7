@@ -272,7 +272,7 @@ function rewind_body(MessageInterface $message): void
  * @return resource
  * @throws \RuntimeException if the file cannot be opened
  */
-function try_fopen($filename, $mode): resource
+function try_fopen($filename, $mode)
 {
     $ex = null;
     $fargs = func_get_args();
