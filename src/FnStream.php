@@ -93,7 +93,7 @@ class FnStream implements StreamInterface
 
     public function close(): void
     {
-        return call_user_func($this->_fn_close);
+        call_user_func($this->_fn_close);
     }
 
     public function detach()

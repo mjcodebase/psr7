@@ -1,5 +1,13 @@
 # CHANGELOG
 
+## 1.3.1 - 2026-10-27
+
+* Fix a compile-time fatal error in `FnStream::close()` by discarding the
+  callback return value, as required by its `void` return type.
+* Pass `false` instead of `null` for `fopen()`'s `use_include_path` argument
+  in `StreamWrapper::getResource()`, avoiding a PHP 8.1+ deprecation.
+* Keep both fixes compatible with PHP 7.4.
+
 ## 1.2.0 - 2015-08-15
 
 * Body as `"0"` is now properly added to a response.

@@ -32,6 +32,20 @@ class FnStreamTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('foo', $s->read(3));
     }
 
+    public function testCloseDiscardsCallbackReturnValue()
+    {
+        $called = false;
+        $stream = new FnStream(array(
+            'close' => function () use (&$called) {
+                $called = true;
+                return 'ignored';
+            }
+        ));
+
+        $this->assertNull($stream->close());
+        $this->assertTrue($called);
+    }
+
     public function testCanCloseOnDestruct()
     {
         $called = false;

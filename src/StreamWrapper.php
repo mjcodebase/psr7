@@ -38,7 +38,7 @@ class StreamWrapper
                 . 'writable, or both.');
         }
 
-        return fopen('guzzle://stream', $mode, null, stream_context_create(array(
+        return fopen('guzzle://stream', $mode, false, stream_context_create(array(
             'guzzle' => array('stream' => $stream)
         )));
     }
